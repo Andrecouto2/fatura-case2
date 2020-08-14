@@ -1,8 +1,7 @@
 package br.com.mastertech.couto.fatura.controller;
 
-import br.com.mastertech.couto.fatura.client.CardClient;
-import br.com.mastertech.couto.fatura.client.PaymentClient;
 import br.com.mastertech.couto.fatura.dtos.GetInvoiceResponse;
+import br.com.mastertech.couto.fatura.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +14,12 @@ import java.util.List;
 public class InvoiceController {
 
     @Autowired
-    private CardClient cardClient;
-
-    @Autowired
-    private PaymentClient paymentClient;
+    private InvoiceService invoiceService;
 
     @GetMapping(value = "/fatura/{cliente-id}/{cartao-id}")
     public ResponseEntity<List<GetInvoiceResponse>> getPaymentsByCardId(@PathVariable("cartao-id") Long cardId,
                                                                         @PathVariable("cliente-id") Long customerId) {
-        List<GetInvoiceResponse> invoices = paymentClient.getPaymentsByCardId(cardId);
-        return ResponseEntity.ok(invoices);
+        return ResponseEntity.ok(invoiceService.getPayments(cardId, customerId));
     }
 
 }
